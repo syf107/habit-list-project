@@ -18,15 +18,15 @@ function Navbar() {
         Maker!
       </NavLink>
       <NavLink
-        to="/progress"
+        to="/trainer"
         className={({ isActive }) =>
           isActive ? activeClassNavLink : classNavLink
         }
       >
-        Progress!
+        Trainer!
       </NavLink>
       <NavLink
-        to="/improve"
+        to="/improver"
         className={({ isActive }) =>
           isActive ? activeClassNavLink : classNavLink
         }

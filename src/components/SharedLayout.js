@@ -4,7 +4,7 @@ import Navbar from "./Navbar";
 
 function SharedLayout() {
   return (
-    <main className="bg-orange-300 h-screen px-3 py-4">
+    <main className="bg-orange-300 min-h-screen max-h-max px-3 py-4">
       <h1 className="text-gray-800 text-5xl font-bold  text-center mb-10">
         Habit List App
       </h1>

@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SharedLayout from "./components/SharedLayout";
 import Maker from "./pages/Maker";
-import Progress from "./pages/Progress";
-import Improve from "./pages/Improve";
+import Trainer from "./pages/Trainer";
+import Improver from "./pages/Improver";
 import Error from "./pages/Error";
 import "./styles/tailwind.css";
 
@@ -12,8 +12,8 @@ function App() {
       <Routes>
         <Route path="/" element={<SharedLayout />}>
           <Route index element={<Maker />} />
-          <Route path="progress" element={<Progress />} />
-          <Route path="improve" element={<Improve />} />
+          <Route path="trainer" element={<Trainer />} />
+          <Route path="improver" element={<Improver />} />
         </Route>
         <Route path="*" element={<Error />} />
       </Routes>
