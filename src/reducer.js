@@ -46,6 +46,7 @@ const reducer = (state, action) => {
       id: state.listOfHabit.length + 1,
       title: state.habitTitle,
       list: state.list,
+      amountHabit: state.list.length,
     };
     return {
       ...state,
@@ -80,8 +81,6 @@ const reducer = (state, action) => {
 
     // take one intended array value. for later use doing splice.
     const [switchedValue] = state.list.filter((item) => item.id === id);
-    // console.log("this is the switch value");
-    // console.log(switchedValue);
 
     console.log("The before splice");
     // console.log(newValue);
@@ -121,10 +120,17 @@ const reducer = (state, action) => {
     return { ...state, list: arrangedArray };
   }
 
+  if (action.type === "UPDATE_INDEX_HABIT_LIST") {
+    // console.log("array updated");
+    const arrangedArray = state.listOfHabit.map((item, index) => {
+      return { ...item, id: index + 1 };
+    });
+    // console.log(arrangedArray);
+    return { ...state, listOfHabit: arrangedArray };
+  }
+
   // REDUCER FOR TRAINER PAGE
   if (action.type === "REMOVE_HABIT_LIST") {
-    console.log(action.payload);
-
     return {
       ...state,
       listOfHabit: state.listOfHabit.filter(
@@ -133,6 +139,250 @@ const reducer = (state, action) => {
     };
   }
 
+  // REDUCER FOR PERFORM HABIT.
+  if (action.type === "ADDING_PERFORMANCE_DAYS") {
+    const { numberDays, id } = action.payload;
+
+    // change id value to index by - 1
+    const index = id - 1;
+    // console.log(numberDays, id);
+
+    //creating days array to contain
+    const days = [...Array(numberDays).keys()].map((x) => {
+      return {
+        id: x + 1,
+        color: "gray-color",
+        passScore: 0,
+        success: 0,
+        failure: 0,
+      };
+    });
+
+    // straight going to the list of each listOfHabit
+    const newList = state.listOfHabit[index].list.map((item) => {
+      // console.log(item);
+      return {
+        ...item,
+        eachHabitProgress: 0,
+        eachHabitProgressPercentage: 0,
+        eachHabitSuccess: 0,
+        eachHabitSuccessPercentage: 0,
+        eachHabitFailure: 0,
+        eachHabitFailurePercentage: 0,
+        days: days,
+      };
+    });
+
+    const listOfhabitModifiedArray = state.listOfHabit.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          overallProgress: 0,
+          overallPercentage: 0,
+          overallSuccess: 0,
+          overallSuccessPercentage: 0,
+          overallFailure: 0,
+          overallFailurePercentage: 0,
+          performanceDays: numberDays,
+          list: newList,
+        };
+      }
+      return item;
+    });
+
+    return {
+      ...state,
+      listOfHabit: [...listOfhabitModifiedArray],
+    };
+  }
+
+  if (action.type === "CHANGE_PERFORMANCE_COLOR") {
+    const { habitListId, indexNumber, habitPerformanceId } = action.payload;
+    // console.log(habitListId, indexNumber, habitPerformanceId);
+
+    const modifiedColorListOfHabit = state.listOfHabit.map((habit) => {
+      if (habit.id === habitListId) {
+        return {
+          ...habit,
+          list: habit.list.map((activity) => {
+            if (activity.id === indexNumber) {
+              return {
+                ...activity,
+                days: activity.days.map((day) => {
+                  if (day.id === habitPerformanceId) {
+                    if (day.color === "green-color") {
+                      return {
+                        ...day,
+                        color: "red-color",
+                        passScore: 1,
+                        failure: 1,
+                        success: 0,
+                      };
+                    } else if (day.color === "red-color") {
+                      return {
+                        ...day,
+                        color: "green-color",
+                        passScore: 1,
+                        success: 1,
+                        failure: 0,
+                      };
+                    } else {
+                      return {
+                        ...day,
+                        color: "green-color",
+                        passScore: 1,
+                        success: 1,
+                        failure: 0,
+                      };
+                    }
+                  }
+                  return day;
+                }),
+              };
+            }
+            return activity;
+          }),
+        };
+      }
+      return habit;
+    });
+
+    return {
+      ...state,
+      listOfHabit: modifiedColorListOfHabit,
+    };
+  }
+
+  if (action.type === "CHANGE_HABIT_PROGRESS_SUCCESS_FAILURE_VALUE") {
+    const { habitListId, indexNumber, habitPerformanceId } = action.payload;
+    // console.log("this is change performance color");
+    // console.log(habitListId, indexNumber, habitPerformanceId);
+
+    const modifiedValueEachHabit = state.listOfHabit.map((habit) => {
+      if (habit.id === habitListId) {
+        return {
+          ...habit,
+          list: habit.list.map((activity) => {
+            if (activity.id === indexNumber) {
+              return {
+                ...activity,
+                eachHabitProgress: activity.days
+                  .map((day) => day.passScore)
+                  .reduce((score, curValue) => score + curValue),
+                eachHabitSuccess: activity.days
+                  .map((day) => day.success)
+                  .reduce((score, curValue) => score + curValue),
+                eachHabitFailure: activity.days
+                  .map((day) => day.failure)
+                  .reduce((score, curValue) => score + curValue),
+              };
+            }
+            return activity;
+          }),
+        };
+      }
+      return habit;
+    });
+
+    return {
+      ...state,
+      listOfHabit: modifiedValueEachHabit,
+    };
+  }
+
+  if (action.type === "CHANGE_HABIT_PROGRESS_SUCCESS_FAILURE_PERCENTAGE") {
+    const { habitListId, indexNumber, habitPerformanceId } = action.payload;
+
+    const modifiedEachHabitPercentage = state.listOfHabit.map((habit) => {
+      if (habit.id === habitListId) {
+        return {
+          ...habit,
+          list: habit.list.map((activity) => {
+            if (activity.id === indexNumber) {
+              return {
+                ...activity,
+                eachHabitPercentage: Math.round(
+                  (activity.eachHabitProgress / habit.performanceDays) * 100
+                ),
+                eachHabitSuccessPercentage: Math.round(
+                  (activity.eachHabitSuccess / habit.performanceDays) * 100
+                ),
+                eachHabitFailurePercentage: Math.round(
+                  (activity.eachHabitFailure / habit.performanceDays) * 100
+                ),
+              };
+            }
+            return activity;
+          }),
+        };
+      }
+      return habit;
+    });
+
+    return {
+      ...state,
+      listOfHabit: modifiedEachHabitPercentage,
+    };
+  }
+
+  if (action.type === "CHANGE_OVERALL_HABIT_PROGRESS_SUCCESS_FAILURE_VALUE") {
+    const { habitListId, indexNumber, habitPerformanceId } = action.payload;
+
+    const modifiedOverallListOfHabit = state.listOfHabit.map((habit) => {
+      if (habit.id === habitListId) {
+        return {
+          ...habit,
+          overallFailure: habit.list
+            .map((activity) => activity.eachHabitFailure)
+            .reduce((score, curValue) => score + curValue),
+          overallSuccess: habit.list
+            .map((activity) => activity.eachHabitSuccess)
+            .reduce((score, curValue) => score + curValue),
+          overallProgress: habit.list
+            .map((activity) => activity.eachHabitProgress)
+            .reduce((score, curValue) => score + curValue),
+        };
+      }
+      return habit;
+    });
+
+    console.log("this is your new each ffailure");
+    console.log(modifiedOverallListOfHabit);
+    return { ...state, listOfHabit: modifiedOverallListOfHabit };
+  }
+
+  if (
+    action.type === "CHANGE_OVERALL_HABIT_PROGRESS_SUCCESS_FAILURE_PERCENTAGE"
+  ) {
+    const { habitListId, indexNumber, habitPerformanceId } = action.payload;
+
+    const modifiedOverallListOfHabit = state.listOfHabit.map((habit) => {
+      if (habit.id === habitListId) {
+        return {
+          ...habit,
+          overallFailurePercentage: Math.round(
+            (habit.overallFailure / habit.performanceDays / habit.amountHabit) *
+              100
+          ),
+          overallSuccessPercentage: Math.round(
+            (habit.overallSuccess / habit.performanceDays / habit.amountHabit) *
+              100
+          ),
+          overallProgressPercentage: Math.round(
+            (habit.overallProgress /
+              habit.performanceDays /
+              habit.amountHabit) *
+              100
+          ),
+        };
+      }
+      return habit;
+    });
+
+    console.log("this is your new each ffailure");
+    console.log(modifiedOverallListOfHabit);
+    return { ...state, listOfHabit: modifiedOverallListOfHabit };
+  }
   throw new Error("no matching action type.");
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useReducer } from "react";
+import React, { useEffect, useContext, useReducer } from "react";
 import reducer from "./reducer";
 
 const AppContext = React.createContext();
@@ -84,7 +84,9 @@ const AppProvider = ({ children }) => {
       );
     } else if (list.length >= 1 && habitTitle === "") {
       showNotification(true, "Please add your habit title.", "danger");
-    } else {
+
+      // to make it run only you submit the input.
+    } else if (list.length >= 1 && habitTitle) {
       dispatch({ type: "HANDLE_SUBMIT_HABIT" });
       showNotification(
         true,
@@ -159,6 +161,47 @@ const AppProvider = ({ children }) => {
     dispatch({ type: "UPDATE_INDEX" });
   }, [...list.map((item) => item.id)]);
 
+  useEffect(() => {
+    dispatch({ type: "UPDATE_INDEX_HABIT_LIST" });
+  }, [...listOfHabit.map((item) => item.id)]);
+
+  // habit perform
+  const changeColor = (habitListId, indexNumber, habitPerformanceId) => {
+    dispatch({
+      type: "CHANGE_PERFORMANCE_COLOR",
+      payload: { habitListId, indexNumber, habitPerformanceId },
+    });
+
+    dispatch({
+      type: "CHANGE_HABIT_PROGRESS_SUCCESS_FAILURE_VALUE",
+      payload: { habitListId, indexNumber, habitPerformanceId },
+    });
+
+    dispatch({
+      type: "CHANGE_HABIT_PROGRESS_SUCCESS_FAILURE_PERCENTAGE",
+      payload: { habitListId, indexNumber, habitPerformanceId },
+    });
+
+    dispatch({
+      type: "CHANGE_OVERALL_HABIT_PROGRESS_SUCCESS_FAILURE_VALUE",
+      payload: { habitListId, indexNumber, habitPerformanceId },
+    });
+
+    dispatch({
+      type: "CHANGE_OVERALL_HABIT_PROGRESS_SUCCESS_FAILURE_PERCENTAGE",
+      payload: { habitListId, indexNumber, habitPerformanceId },
+    });
+  };
+
+  const handleHabitPerformanceDays = (event, id) => {
+    const numberDays = Number(event.target.value);
+
+    dispatch({
+      type: "ADDING_PERFORMANCE_DAYS",
+      payload: { numberDays, id },
+    });
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -175,6 +218,8 @@ const AppProvider = ({ children }) => {
         moveTop,
         moveBottom,
         removeHabitList,
+        changeColor,
+        handleHabitPerformanceDays,
       }}
     >
       {children}

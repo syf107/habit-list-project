@@ -10,7 +10,7 @@ function Notification({ message, type, showNotification, list }) {
 
   return (
     <section
-      className={`rounded-md text-center px3 py-2 w-9/12 mx-auto text-xl text-gray-200 ${
+      className={`sticky top-2 rounded-md text-center px3 py-2 w-9/12 mx-auto text-xl text-gray-200 ${
         type === "success" ? "bg-green-500" : "bg-red-500"
       }`}
     >

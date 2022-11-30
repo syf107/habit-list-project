@@ -19,7 +19,7 @@ function Maker() {
   return (
     <section className="w-7/12 mx-auto capitalize">
       <Window string={"maker"} />
-      <div className="bg-red-400 relative h-auto pt-5">
+      <div className="bg-red-400 relative max-h-fit min-h-[30rem] pt-5">
         {notification.show && (
           <Notification
             {...notification}

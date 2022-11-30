@@ -3,15 +3,19 @@ import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { useGlobalContext } from "../context";
 import { VscChecklist } from "react-icons/vsc";
+import { Link } from "react-router-dom";
 
-function LisOfHabits({ id, title, list }) {
+function LisOfHabits(data) {
+  const { id, title, list } = data;
   const { removeHabitList } = useGlobalContext();
   const [expand, setExpand] = useState(false);
+  console.log("The data is...");
+  console.log(data);
 
   return (
     <article
       key={id}
-      className="bg-blue-400 shadow-md  border-4 rounded-lg border-black mb-10 px-5 p-5 hover:shadow-2xl hover:-translate-y-3 transition-all duration-300 hover:shadow-blue-900 h-auto"
+      className="bg-blue-300 shadow-md  border-4 rounded-lg border-black mb-10 px-5 p-5 hover:shadow-2xl hover:-translate-y-3 transition-all duration-300 hover:shadow-blue-900 h-auto"
     >
       <section className="flex justify-between items-center">
         <button
@@ -20,11 +24,11 @@ function LisOfHabits({ id, title, list }) {
         >
           {!expand ? <AiOutlinePlus /> : <AiOutlineMinus />}
         </button>
-        <div>
+        <div className="text-center">
           <p className="text-lg">Name of Habit List:</p>
           <p className="text-2xl font-bold">{title}</p>
         </div>
-        <div>
+        <div className="text-center">
           <p className="text-lg">How many habits:</p>
           <p className="text-2xl font-bold">
             {list.length} {list.length === 1 ? "Habit" : "Habits"}
@@ -36,10 +40,10 @@ function LisOfHabits({ id, title, list }) {
       </section>
       <section className="w-full mt-5 bg-blue-200 rounded-lg h-auto px-5 py-1 ">
         {expand && (
-          <div className="flex justify-between items-center py-5 px-5">
+          <div className="flex justify-between items-center py-5 px-5 transition-all ease-in duration-500">
             <div>
               <h5 className="text-2xl font-bold">list of habits</h5>
-              <ul className="py-2">
+              <ul className="py-2 ">
                 {list.map((item) => {
                   const { id, habitName } = item;
                   return (
@@ -51,12 +55,12 @@ function LisOfHabits({ id, title, list }) {
                 })}
               </ul>
             </div>
-            <div className="w-5/12 flex justify-center">
+            <Link to={`/habits/${id}`} className="w-5/12 flex justify-center">
               <button className="w-auto h-auto p-5 flex-col hover:bg-blue-300 rounded-md">
                 <VscChecklist className="text-7xl m-auto" />
                 <p className="text-lg font-bold text-center">Details</p>
               </button>
-            </div>
+            </Link>
           </div>
         )}
       </section>

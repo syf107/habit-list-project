@@ -5,7 +5,7 @@ function Window({ string }) {
       <div className="flex gap-2">
         <div className="w-3 h-3 bg-red-400 rounded-full"></div>
         <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-        <div className="w-3 h-3 bg-orange-300 rounded-full"></div>
+        <div className="w-3 h-3 bg-green-400 rounded-full"></div>
       </div>
     </div>
   );
