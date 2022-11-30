@@ -82,9 +82,6 @@ const reducer = (state, action) => {
     // take one intended array value. for later use doing splice.
     const [switchedValue] = state.list.filter((item) => item.id === id);
 
-    console.log("The before splice");
-    // console.log(newValue);
-
     let position;
     if (direction === "top") {
       // id minus 2
@@ -102,8 +99,6 @@ const reducer = (state, action) => {
 
     newValue.splice(position, 0, switchedValue);
 
-    // console.log("The result filter");
-    // console.log(newValue);
     return { ...state, list: newValue };
   }
 
@@ -112,20 +107,16 @@ const reducer = (state, action) => {
   }
 
   if (action.type === "UPDATE_INDEX") {
-    // console.log("array updated");
     const arrangedArray = state.list.map((item, index) => {
       return { ...item, id: index + 1 };
     });
-    // console.log(arrangedArray);
     return { ...state, list: arrangedArray };
   }
 
   if (action.type === "UPDATE_INDEX_HABIT_LIST") {
-    // console.log("array updated");
     const arrangedArray = state.listOfHabit.map((item, index) => {
       return { ...item, id: index + 1 };
     });
-    // console.log(arrangedArray);
     return { ...state, listOfHabit: arrangedArray };
   }
 
@@ -145,7 +136,6 @@ const reducer = (state, action) => {
 
     // change id value to index by - 1
     const index = id - 1;
-    // console.log(numberDays, id);
 
     //creating days array to contain
     const days = [...Array(numberDays).keys()].map((x) => {
@@ -160,7 +150,6 @@ const reducer = (state, action) => {
 
     // straight going to the list of each listOfHabit
     const newList = state.listOfHabit[index].list.map((item) => {
-      // console.log(item);
       return {
         ...item,
         eachHabitProgress: 0,
@@ -198,7 +187,6 @@ const reducer = (state, action) => {
 
   if (action.type === "CHANGE_PERFORMANCE_COLOR") {
     const { habitListId, indexNumber, habitPerformanceId } = action.payload;
-    // console.log(habitListId, indexNumber, habitPerformanceId);
 
     const modifiedColorListOfHabit = state.listOfHabit.map((habit) => {
       if (habit.id === habitListId) {
@@ -254,9 +242,7 @@ const reducer = (state, action) => {
   }
 
   if (action.type === "CHANGE_HABIT_PROGRESS_SUCCESS_FAILURE_VALUE") {
-    const { habitListId, indexNumber, habitPerformanceId } = action.payload;
-    // console.log("this is change performance color");
-    // console.log(habitListId, indexNumber, habitPerformanceId);
+    const { habitListId, indexNumber } = action.payload;
 
     const modifiedValueEachHabit = state.listOfHabit.map((habit) => {
       if (habit.id === habitListId) {
@@ -291,7 +277,7 @@ const reducer = (state, action) => {
   }
 
   if (action.type === "CHANGE_HABIT_PROGRESS_SUCCESS_FAILURE_PERCENTAGE") {
-    const { habitListId, indexNumber, habitPerformanceId } = action.payload;
+    const { habitListId, indexNumber } = action.payload;
 
     const modifiedEachHabitPercentage = state.listOfHabit.map((habit) => {
       if (habit.id === habitListId) {
@@ -326,7 +312,7 @@ const reducer = (state, action) => {
   }
 
   if (action.type === "CHANGE_OVERALL_HABIT_PROGRESS_SUCCESS_FAILURE_VALUE") {
-    const { habitListId, indexNumber, habitPerformanceId } = action.payload;
+    const { habitListId } = action.payload;
 
     const modifiedOverallListOfHabit = state.listOfHabit.map((habit) => {
       if (habit.id === habitListId) {
@@ -346,15 +332,13 @@ const reducer = (state, action) => {
       return habit;
     });
 
-    console.log("this is your new each ffailure");
-    console.log(modifiedOverallListOfHabit);
     return { ...state, listOfHabit: modifiedOverallListOfHabit };
   }
 
   if (
     action.type === "CHANGE_OVERALL_HABIT_PROGRESS_SUCCESS_FAILURE_PERCENTAGE"
   ) {
-    const { habitListId, indexNumber, habitPerformanceId } = action.payload;
+    const { habitListId } = action.payload;
 
     const modifiedOverallListOfHabit = state.listOfHabit.map((habit) => {
       if (habit.id === habitListId) {
@@ -379,8 +363,6 @@ const reducer = (state, action) => {
       return habit;
     });
 
-    console.log("this is your new each ffailure");
-    console.log(modifiedOverallListOfHabit);
     return { ...state, listOfHabit: modifiedOverallListOfHabit };
   }
   throw new Error("no matching action type.");

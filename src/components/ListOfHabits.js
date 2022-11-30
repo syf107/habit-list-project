@@ -9,8 +9,8 @@ function LisOfHabits(data) {
   const { id, title, list } = data;
   const { removeHabitList } = useGlobalContext();
   const [expand, setExpand] = useState(false);
-  console.log("The data is...");
-  console.log(data);
+  // console.log("The data is...");
+  // console.log(data);
 
   return (
     <article
@@ -25,7 +25,7 @@ function LisOfHabits(data) {
           {!expand ? <AiOutlinePlus /> : <AiOutlineMinus />}
         </button>
         <div className="text-center">
-          <p className="text-lg">Name of Habit List:</p>
+          <p className="text-lg">Habit List Name:</p>
           <p className="text-2xl font-bold">{title}</p>
         </div>
         <div className="text-center">
@@ -34,7 +34,10 @@ function LisOfHabits(data) {
             {list.length} {list.length === 1 ? "Habit" : "Habits"}
           </p>
         </div>
-        <button onClick={() => removeHabitList(id)} className="text-4xl p-2">
+        <button
+          onClick={() => removeHabitList(id)}
+          className="text-4xl p-2"
+        >
           <FaRegTrashAlt />
         </button>
       </section>
@@ -55,7 +58,11 @@ function LisOfHabits(data) {
                 })}
               </ul>
             </div>
-            <Link to={`/habits/${id}`} className="w-5/12 flex justify-center">
+            <Link
+              key={id}
+              to={`/habits/${id}`}
+              className="w-5/12 flex justify-center"
+            >
               <button className="w-auto h-auto p-5 flex-col hover:bg-blue-300 rounded-md">
                 <VscChecklist className="text-7xl m-auto" />
                 <p className="text-lg font-bold text-center">Details</p>

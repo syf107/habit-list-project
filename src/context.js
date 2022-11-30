@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useReducer } from "react";
+import React, { useCallback, useEffect, useContext, useReducer } from "react";
 import reducer from "./reducer";
 
 const AppContext = React.createContext();
@@ -27,17 +27,8 @@ const habitListState = getLocalStorage();
 const AppProvider = ({ children }) => {
   // Hooks.
   const [state, dispatch] = useReducer(reducer, habitListState);
-  const {
-    habitName,
-    editHabitID,
-    isEditing,
-    notification,
-    habitTitle,
-    list,
-    listOfHabit,
-  } = state;
-  console.log("here");
-  console.log(state);
+  const { habitName, editHabitID, isEditing, habitTitle, list, listOfHabit } =
+    state;
 
   // the setting the value of setNotification .
   const showNotification = (show = false, message = "", type = "") => {
@@ -97,10 +88,14 @@ const AppProvider = ({ children }) => {
   };
 
   // remove an item from the list.
-  const removeItem = (id) => {
-    dispatch({ type: "REMOVE_ITEM", payload: id });
-    showNotification(true, "the habit has been removed", "danger");
-  };
+  const removeItem = useCallback(
+    (id) => {
+      dispatch({ type: "REMOVE_ITEM", payload: id });
+      showNotification(true, "the habit has been removed", "danger");
+      dispatch({ type: "UPDATE_INDEX" });
+    },
+    [list]
+  );
 
   // editing the input.
   const editItem = (id) => {
@@ -112,33 +107,41 @@ const AppProvider = ({ children }) => {
     );
   };
 
-  const moveTop = (id, direction = "top") => {
-    if (id === 1 && direction === "top") {
-      showNotification(
-        true,
-        "You are on the first index. can't go top anymore.",
-        "failed"
-      );
-      return;
-    } else if (direction === "top") {
-      showNotification(true, "The list moved up.", "success");
-    }
-    moveList(id, direction);
-  };
+  const moveTop = useCallback(
+    (id, direction = "top") => {
+      if (id === 1 && direction === "top") {
+        showNotification(
+          true,
+          "You are on the first index. can't go top anymore.",
+          "failed"
+        );
+        return;
+      } else if (direction === "top") {
+        showNotification(true, "The list moved up.", "success");
+      }
+      moveList(id, direction);
+      dispatch({ type: "UPDATE_INDEX" });
+    },
+    [list]
+  );
 
-  const moveBottom = (id, direction = "bottom") => {
-    if (id === state.list.length && direction === "bottom") {
-      showNotification(
-        true,
-        "You are on the last index. Can't go bottom anymore.",
-        "failed"
-      );
-      return;
-    } else if (direction === "bottom") {
-      showNotification(true, "The list moved bottom.", "success");
-    }
-    moveList(id, direction);
-  };
+  const moveBottom = useCallback(
+    (id, direction = "bottom") => {
+      if (id === state.list.length && direction === "bottom") {
+        showNotification(
+          true,
+          "You are on the last index. Can't go bottom anymore.",
+          "failed"
+        );
+        return;
+      } else if (direction === "bottom") {
+        showNotification(true, "The list moved bottom.", "success");
+      }
+      moveList(id, direction);
+      dispatch({ type: "UPDATE_INDEX" });
+    },
+    [list]
+  );
 
   const moveList = (id, direction) => {
     dispatch({ type: "MOVE_LIST", payload: { id, direction } });
@@ -149,21 +152,17 @@ const AppProvider = ({ children }) => {
     showNotification(true, "You have cleared the entire list.", "danger");
   };
 
-  const removeHabitList = (id) => {
-    dispatch({ type: "REMOVE_HABIT_LIST", payload: id });
-  };
+  const removeHabitList = useCallback(
+    (id) => {
+      dispatch({ type: "REMOVE_HABIT_LIST", payload: id });
+      dispatch({ type: "UPDATE_INDEX_HABIT_LIST" });
+    },
+    [listOfHabit]
+  );
 
   useEffect(() => {
     localStorage.setItem("habitListState", JSON.stringify(state));
   }, [state]);
-
-  useEffect(() => {
-    dispatch({ type: "UPDATE_INDEX" });
-  }, [...list.map((item) => item.id)]);
-
-  useEffect(() => {
-    dispatch({ type: "UPDATE_INDEX_HABIT_LIST" });
-  }, [...listOfHabit.map((item) => item.id)]);
 
   // habit perform
   const changeColor = (habitListId, indexNumber, habitPerformanceId) => {

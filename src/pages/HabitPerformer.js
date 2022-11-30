@@ -79,7 +79,10 @@ function HabitPerformer() {
                 days,
               } = habit;
               return (
-                <div className="grid grid-habit-performer__table odd:bg-blue-400 even:bg-blue-300 justify-items-center items-center">
+                <div
+                  key={indexNumber}
+                  className="grid grid-habit-performer__table odd:bg-blue-400 even:bg-blue-300 justify-items-center items-center"
+                >
                   <div className=" border-r-4 border-black justify-self-stretch self-center h-full w-full flex justify-center items-center">
                     <p className="text-lg">{indexNumber}.</p>
                   </div>
