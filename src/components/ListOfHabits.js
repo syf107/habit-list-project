@@ -50,7 +50,10 @@ function LisOfHabits(data) {
                 {list.map((item) => {
                   const { id, habitName } = item;
                   return (
-                    <li className="pl-3 text-lg font-semibold p-1 tracking-wide">
+                    <li
+                      key={id}
+                      className="pl-3 text-lg font-semibold p-1 tracking-wide"
+                    >
                       <span className="pr-2">{id}.</span>
                       <span>{habitName}</span>
                     </li>

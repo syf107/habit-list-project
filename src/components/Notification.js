@@ -6,7 +6,7 @@ function Notification({ message, type, showNotification, list }) {
       showNotification();
     }, 3000);
     return () => clearTimeout(timeout);
-  }, [list]);
+  }, [showNotification]);
 
   return (
     <section

@@ -27,8 +27,7 @@ const habitListState = getLocalStorage();
 const AppProvider = ({ children }) => {
   // Hooks.
   const [state, dispatch] = useReducer(reducer, habitListState);
-  const { habitName, editHabitID, isEditing, habitTitle, list, listOfHabit } =
-    state;
+  const { habitName, editHabitID, isEditing, habitTitle, list } = state;
 
   // the setting the value of setNotification .
   const showNotification = (show = false, message = "", type = "") => {
@@ -88,14 +87,11 @@ const AppProvider = ({ children }) => {
   };
 
   // remove an item from the list.
-  const removeItem = useCallback(
-    (id) => {
-      dispatch({ type: "REMOVE_ITEM", payload: id });
-      showNotification(true, "the habit has been removed", "danger");
-      dispatch({ type: "UPDATE_INDEX" });
-    },
-    [list]
-  );
+  const removeItem = useCallback((id) => {
+    dispatch({ type: "REMOVE_ITEM", payload: id });
+    showNotification(true, "the habit has been removed", "danger");
+    dispatch({ type: "UPDATE_INDEX" });
+  }, []);
 
   // editing the input.
   const editItem = (id) => {
@@ -107,27 +103,24 @@ const AppProvider = ({ children }) => {
     );
   };
 
-  const moveTop = useCallback(
-    (id, direction = "top") => {
-      if (id === 1 && direction === "top") {
-        showNotification(
-          true,
-          "You are on the first index. can't go top anymore.",
-          "failed"
-        );
-        return;
-      } else if (direction === "top") {
-        showNotification(true, "The list moved up.", "success");
-      }
-      moveList(id, direction);
-      dispatch({ type: "UPDATE_INDEX" });
-    },
-    [list]
-  );
+  const moveTop = useCallback((id, direction = "top") => {
+    if (id === 1 && direction === "top") {
+      showNotification(
+        true,
+        "You are on the first index. can't go top anymore.",
+        "failed"
+      );
+      return;
+    } else if (direction === "top") {
+      showNotification(true, "The list moved up.", "success");
+    }
+    moveList(id, direction);
+    dispatch({ type: "UPDATE_INDEX" });
+  }, []);
 
   const moveBottom = useCallback(
     (id, direction = "bottom") => {
-      if (id === state.list.length && direction === "bottom") {
+      if (id === list.length && direction === "bottom") {
         showNotification(
           true,
           "You are on the last index. Can't go bottom anymore.",
@@ -152,13 +145,10 @@ const AppProvider = ({ children }) => {
     showNotification(true, "You have cleared the entire list.", "danger");
   };
 
-  const removeHabitList = useCallback(
-    (id) => {
-      dispatch({ type: "REMOVE_HABIT_LIST", payload: id });
-      dispatch({ type: "UPDATE_INDEX_HABIT_LIST" });
-    },
-    [listOfHabit]
-  );
+  const removeHabitList = useCallback((id) => {
+    dispatch({ type: "REMOVE_HABIT_LIST", payload: id });
+    dispatch({ type: "UPDATE_INDEX_HABIT_LIST" });
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("habitListState", JSON.stringify(state));
