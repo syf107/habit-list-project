@@ -20,8 +20,6 @@ function HabitPerformer() {
     },
   ] = listOfHabit.filter((habit) => habit.id === Number(linkId));
 
-  console.log(linkId, listOfHabit);
-
   return (
     <main className="bg-orange-300 min-h-screen max-h-max flex flex-col p-10">
       <h1 className="habit-performer__title">HabitPerformer</h1>
@@ -78,6 +76,7 @@ function HabitPerformer() {
                 eachHabitFailurePercentage,
                 days,
               } = habit;
+
               return (
                 <div
                   key={indexNumber}
@@ -90,8 +89,9 @@ function HabitPerformer() {
                     {name}
                   </p>
 
-                  <div className="col-span-4 my-5">
-                    <div className=" flex flex-row justify-center items-center gap-5 md:gap-2 px-5 py-3 border-4 border-blue-600 bg-blue-500 mb-3 rounded-lg h-fit overflow-auto performance-scroll">
+                  {/* performance column box */}
+                  <div className="col-span-4 w-full px-5 my-5">
+                    <div className="flex flex-row gap-3 md:gap-2 px-4 py-3 mx-10 border-4 border-blue-600 bg-blue-500 mb-3 rounded-lg overflow-auto performance-scroll">
                       {days === undefined ? (
                         <p>You have to select the days first.</p>
                       ) : (
