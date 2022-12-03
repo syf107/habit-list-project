@@ -287,7 +287,7 @@ const reducer = (state, action) => {
             if (activity.id === indexNumber) {
               return {
                 ...activity,
-                eachHabitPercentage: Math.round(
+                eachHabitProgressPercentage: Math.round(
                   (activity.eachHabitProgress / habit.performanceDays) * 100
                 ),
                 eachHabitSuccessPercentage: Math.round(

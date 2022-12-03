@@ -19,6 +19,8 @@ function HabitPerformer() {
       overallFailurePercentage,
     },
   ] = listOfHabit.filter((habit) => habit.id === Number(linkId));
+  console.log("here your habit.");
+  console.log(listOfHabit);
 
   return (
     <main className="bg-orange-300 min-h-screen max-h-max flex flex-col p-10">
@@ -27,8 +29,8 @@ function HabitPerformer() {
         <Window string={"Performer"} />
         <div className="bg-blue-400 min-h-[30rem] w-auto px-10 py-5 ">
           <h3 className="text-3xl">{title}</h3>
-
           {!performanceDays ? (
+            /* selecting the days value. */
             <select
               className="text-3xl bg-none border-black border-t-4 border-x-4 bg-blue-400/[0.3] rounded-t-lg px-2 pt-1"
               onChange={(e) => handleHabitPerformanceDays(e, Number(linkId))}
@@ -46,6 +48,7 @@ function HabitPerformer() {
               <option value="30">1 month</option>
             </select>
           ) : (
+            /* overall percentage value */
             <div className="flex flex-row justify-center gap-10">
               <h4 className="px-2 text-3xl w-fit border-black border-x-4 border-t-4 rounded-t-lg">
                 Progress: {overallProgressPercentage} %
@@ -58,6 +61,7 @@ function HabitPerformer() {
               </h4>
             </div>
           )}
+          {/* header */}
           <div className="bg-blue-300 border-4 border-black rounded-lg overflow-auto">
             <div className="grid grid-habit-performer__table text-xl items-center bg-blue-500 text-center py-5 border-b-4 border-black">
               <p className="">No.</p>
@@ -71,7 +75,7 @@ function HabitPerformer() {
               const {
                 id: indexNumber,
                 habitName: name,
-                eachHabitPercentage,
+                eachHabitProgressPercentage,
                 eachHabitSuccessPercentage,
                 eachHabitFailurePercentage,
                 days,
@@ -91,7 +95,11 @@ function HabitPerformer() {
 
                   {/* performance column box */}
                   <div className="col-span-4 w-full px-5 my-5">
-                    <div className="flex flex-row gap-3 md:gap-2 px-4 py-3 mx-10 border-4 border-blue-600 bg-blue-500 mb-3 rounded-lg overflow-auto performance-scroll">
+                    <div
+                      className={`flex flex-row ${
+                        days === undefined ? "justify-center text-xl" : null
+                      } gap-3 md:gap-2 px-4 py-3 mx-10 border-4 border-blue-600 bg-blue-500 mb-3 rounded-lg overflow-auto performance-scroll`}
+                    >
                       {days === undefined ? (
                         <p>You have to select the days first.</p>
                       ) : (
@@ -132,7 +140,7 @@ function HabitPerformer() {
                     </div>
                   </div>
 
-                  <p className="text-2xl"> {eachHabitPercentage}% </p>
+                  <p className="text-2xl"> {eachHabitProgressPercentage}% </p>
                 </div>
               );
             })}
