@@ -9,17 +9,35 @@ import "./styles/tailwind.css";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRoutera>
       <Routes>
-        <Route path="/" element={<SharedLayout />}>
-          <Route index element={<Maker />} />
-          <Route path="trainer" element={<Trainer />} />
-          <Route path="improver" element={<Improver />} />
+        <Route
+          path="/*"
+          element={<SharedLayout />}
+        >
+          <Route
+            index
+            element={<Maker />}
+          />
+          <Route
+            path="trainer"
+            element={<Trainer />}
+          />
+          <Route
+            path="improver"
+            element={<Improver />}
+          />
         </Route>
-        <Route path="habits/:id" element={<HabitPerformer />} />
-        <Route path="*" element={<Error />} />
+        <Route
+          path="habits/:id"
+          element={<HabitPerformer />}
+        />
+        <Route
+          path="*"
+          element={<Error />}
+        />
       </Routes>
-    </BrowserRouter>
+    </BrowserRoutera>
   );
 }
 
